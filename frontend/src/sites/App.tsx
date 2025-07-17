@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Articles from '../components/Articles';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -8,6 +9,9 @@ const content =
   'Stay updated with the latest trends, tutorials, and insights in technology and software development.';
 
 const App = () => {
+  useEffect(() => {
+    window.document.title = 'Blog';
+  }, []);
   return (
     <>
       <Header />
