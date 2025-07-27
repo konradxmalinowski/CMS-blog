@@ -20,7 +20,6 @@ const ArticlePage = () => {
     article = articles.find(
       (article: Article) => article.id === id?.toString()
     );
-    console.log(articles);
   }
 
   useEffect(() => {

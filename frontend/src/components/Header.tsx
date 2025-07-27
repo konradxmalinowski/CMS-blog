@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 import LinkItem from './LinkItem';
 
 const Header = () => {
+  const navigate = useNavigate();
   const styles = 'flex items-center gap-x-4';
 
   return (
@@ -15,11 +17,18 @@ const Header = () => {
           <li>
             <LinkItem to="/about">About</LinkItem>
           </li>
+          <li>
+            <LinkItem to="/admin">Admin</LinkItem>
+          </li>
         </ul>
       </section>
       <section className={styles}>
-        <Button variant="light">Login</Button>
-        <Button variant="dark">Register</Button>
+        <Button variant="light" onClick={() => navigate('/login')}>
+          Login
+        </Button>
+        <Button variant="dark" onClick={() => navigate('/register')}>
+          Register
+        </Button>
       </section>
     </header>
   );

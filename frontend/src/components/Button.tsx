@@ -2,14 +2,16 @@ const Button = ({
   variant,
   children,
   className,
+  onClick,
   ...props
 }: {
   variant: string;
   className?: string;
+  onClick?: () => void;
   children: React.ReactNode;
 }) => {
   let styles =
-    'font-semibold py-2 px-3 rounded-xl transition-colors hover:transition-colors ';
+    'font-semibold py-2 px-3 rounded-xl transition-colors hover:transition-colors';
   styles += className + ' ';
 
   if (variant === 'light')
@@ -18,7 +20,7 @@ const Button = ({
     styles += 'text-white bg-neutral-950 hover:bg-neutral-800';
 
   return (
-    <button className={styles} {...props}>
+    <button className={styles} onClick={onClick} {...props}>
       {children}
     </button>
   );

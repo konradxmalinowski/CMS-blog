@@ -4,7 +4,7 @@ const Footer = () => {
   const styles = 'flex items-center gap-x-4';
 
   return (
-    <footer className="w-full border-t-1 border-t-gray-300 min-h-12 flex justify-between py-6 px-14">
+    <footer className="w-full border-t-1 border-t-gray-300 min-h-12 flex justify-between py-6 px-14 mt-8">
       <section className={styles}>
         <p className="text-gray-500">© 2025 TechBlog. All rights reserved.</p>
       </section>

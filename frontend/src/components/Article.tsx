@@ -38,7 +38,6 @@ const Article = ({
       </div>
       <div className="flex justify-between items-center mt-2.5">
         <span className="text-gray-600">{timeLong}</span>
-        {/* add dynamic links  */}
         <Link to={`article/${id}`}>Read more -&gt;</Link>
       </div>
     </ArticleWrapper>
