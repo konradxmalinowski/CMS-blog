@@ -1,30 +1,51 @@
 import Form from '../components/Form';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import LinkItem from '../components/LinkItem';
-import { checkIfIsLoggedIn, login } from '../http';
+import { checkIfIsLoggedIn, login, logout as logoutHttp } from '../http';
 import { useNavigate } from 'react-router-dom';
+import { Context } from '../store/Context';
 
 const Login = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
+  const [isSubmitted, setIsSubmitted] = useState<boolean>();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [name, setName] = useState<string>('');
+
+  const { setName: setGlobalName } = useContext(Context);
   const navigate = useNavigate();
 
-  const onSubmit = async (email: string, password: string) => {
+  const check = async () => {
+    const result = await checkIfIsLoggedIn();
+    if (!result?.success) {
+      setIsLoggedIn(false);
+    } else {
+      setIsLoggedIn(true);
+      setName(result?.name ?? '');
+    }
+  };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+
     if (!email.trim() || !password.trim()) {
       alert('Email and password must be filled');
+      setIsSubmitted(false);
       return;
     }
 
     const result = await login(email, password);
     if (!result?.success) {
-      alert(result?.error);
+      alert(result?.message);
       return;
     }
+
+    setGlobalName(name);
 
     console.log('Logged in successfully. Redirecting to admin panel...');
     setTimeout(() => {
@@ -32,26 +53,28 @@ const Login = () => {
     }, 1000);
   };
 
-  useEffect(() => {
-    const check = async () => {
-      const result = await checkIfIsLoggedIn();
-      if (!result?.success) {
-        setIsLoggedIn(false);
-      } else {
-        setIsLoggedIn(true);
-      }
-    };
+  const logout = async () => {
+    const result = await logoutHttp();
+    if (!result?.success) {
+      alert(result?.message);
+      return;
+    }
 
+    setIsSubmitted(false);
+    setGlobalName('');
+  };
+
+  useEffect(() => {
     check();
-  }, []);
+  }, [isSubmitted]);
 
   const content = (
     <>
-      <Form>
+      <Form onSubmit={onSubmit}>
         <h1 className="text-xl font-medium">Sign in to TechBlog</h1>
         <Input
           label="Email"
-          type="text"
+          type="email"
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             setEmail(event.target.value ?? '')
           }
@@ -65,11 +88,7 @@ const Login = () => {
           }
           placeholder="Enter your password"
         />
-        <Button
-          onClick={() => onSubmit(email, password)}
-          variant="dark"
-          className="w-full"
-        >
+        <Button variant="dark" className="w-full">
           Sign in
         </Button>
         <p className="text-center w-full">
@@ -84,9 +103,12 @@ const Login = () => {
     <>
       <Header />
       {isLoggedIn ? (
-        <Button variant="dark" onClick={() => {}}>
-          Logout
-        </Button>
+        <div className="flex justify-center items-center flex-col gap-y-2.5">
+          <p>Hello {name}. Do you want to logout?</p>
+          <Button variant="dark" onClick={logout}>
+            Logout
+          </Button>
+        </div>
       ) : (
         content
       )}

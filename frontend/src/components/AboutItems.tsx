@@ -21,6 +21,8 @@ const TECHNOLOGIES = [
   'Java',
 ];
 
+const buttonStyles = 'flex justify-center items-center gap-1.5';
+
 const AboutItems = () => {
   return (
     <>
@@ -64,30 +66,29 @@ const AboutItems = () => {
             Have a question, suggestion, or want to contribute? We&apos;d love
             to hear from you!
           </p>
-          <div className="flex flex-wrap justify-center gap-2.5 mt-3.5">
+          <div className="flex flex-wrap justify-start items-center gap-2.5 mt-3.5">
             <a href="mailto:malinowski.konrad45@gmail.com">
-              <Button
-                variant="light"
-                className="flex justify-center items-center gap-1.5"
-              >
-                <img src={emailIcon} alt="email icon" />
+              <Button variant="light" className={buttonStyles}>
+                <img
+                  src={emailIcon}
+                  alt="email icon"
+                  className="inline mr-1.5"
+                />
                 malinowski.konrad45@gmail.com
               </Button>
             </a>
             <a href="https://github.com/konradxmalinowski">
-              <Button
-                variant="light"
-                className="flex justify-center items-center gap-1.5"
-              >
-                <img src={githubIcon} alt="github icon" />
+              <Button variant="light" className={buttonStyles}>
+                <img
+                  src={githubIcon}
+                  alt="github icon"
+                  className="inline mr-1.5"
+                />
                 konradxmalinowski
               </Button>
             </a>
             <a href="https://www.linkedin.com/in/konradxmalinowski">
-              <Button
-                variant="light"
-                className="flex justify-center items-center gap-1.5"
-              >
+              <Button variant="light" className={buttonStyles}>
                 Konrad Malinowski
               </Button>
             </a>

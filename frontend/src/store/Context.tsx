@@ -3,6 +3,8 @@ import type { Article } from '../components/Articles';
 
 type ContextType = {
   articles: Article[];
+  name: string;
+  setName: React.Dispatch<React.SetStateAction<string>>;
   fetchArticles: () => void;
 };
 
@@ -20,6 +22,8 @@ export const contextPrototype = {
       content: '',
     },
   ],
+  name: '',
+  setName: () => {},
   fetchArticles: () => {},
 };
 

@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import Input from '../components/Input';
 import { useState } from 'react';
 import LinkItem from '../components/LinkItem';
-import { register } from '../http';
+import { logout, register } from '../http';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -14,7 +14,15 @@ const Register = () => {
   const [name, setName] = useState<string>('');
   const navigate = useNavigate();
 
-  const onSubmit = async (email: string, password: string, name: string) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const resultLogout = await logout();
+    if (!resultLogout?.success) {
+      alert(resultLogout?.message);
+      return;
+    }
+
     if (!email.trim() || !password.trim() || !name.trim()) {
       alert('Email, name and password must be filled');
       return;
@@ -22,7 +30,7 @@ const Register = () => {
 
     const result = await register(name, email, password);
     if (!result?.success) {
-      alert(result?.error);
+      alert(result?.message);
       return;
     }
 
@@ -35,7 +43,7 @@ const Register = () => {
   return (
     <>
       <Header />
-      <Form>
+      <Form onSubmit={onSubmit}>
         <h1 className="text-xl font-medium">Create your account</h1>
         <Input
           label="Full Name"
@@ -47,7 +55,7 @@ const Register = () => {
         />
         <Input
           label="Email"
-          type="text"
+          type="email"
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             setEmail(event.target.value ?? '')
           }
@@ -61,11 +69,7 @@ const Register = () => {
           }
           placeholder="Create a password"
         />
-        <Button
-          onClick={() => onSubmit(email, password, name)}
-          variant="dark"
-          className="w-full"
-        >
+        <Button variant="dark" className="w-full">
           Create account
         </Button>
         <p className="text-center w-full">

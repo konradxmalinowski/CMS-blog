@@ -3,7 +3,6 @@ const Button = ({
   children,
   className,
   onClick,
-  ...props
 }: {
   variant: string;
   className?: string;
@@ -20,7 +19,7 @@ const Button = ({
     styles += 'text-white bg-neutral-950 hover:bg-neutral-800';
 
   return (
-    <button className={styles} onClick={onClick} {...props}>
+    <button className={`${styles} ${className}`} onClick={onClick}>
       {children}
     </button>
   );

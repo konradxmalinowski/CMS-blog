@@ -16,13 +16,17 @@ type usersType = {
 };
 
 const Admin = () => {
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>();
   const [users, setUsers] = useState<usersType[]>([]);
+  const [message, setMessage] = useState<string>();
 
   useEffect(() => {
     const check = async () => {
       const response: Response = await fetch(
-        'http://localhost/cms-blog/backend/admin_panel.php'
+        'http://localhost/cms-blog/backend/admin_panel.php',
+        {
+          credentials: 'include',
+        }
       );
 
       if (!response.ok) {
@@ -33,13 +37,15 @@ const Admin = () => {
       const result: resultType = await response.json();
       if (!result.success) {
         setIsAdmin(false);
+        setMessage(result.message);
         return;
       }
+
+      setIsAdmin(true);
 
       if (result.users) {
         setUsers(result.users);
       }
-      setIsAdmin(true);
     };
 
     check();
@@ -47,13 +53,16 @@ const Admin = () => {
   return (
     <>
       <Header />
-      {!isAdmin && <h1 className="text-2xl font-medium">Access denied</h1>}
-      {isAdmin &&
-        users.map((user) => (
-          <li key={user.id}>
-            {user.name} &lt;-&gt; {user.email}
-          </li>
-        ))}
+      {!isAdmin && <h1 className="text-2xl">{message}</h1>}
+      {isAdmin && (
+        <ol>
+          {users.map((user) => (
+            <li key={user.id}>
+              {user.name} &lt;-&gt; {user.email}
+            </li>
+          ))}
+        </ol>
+      )}
       <Footer />
     </>
   );

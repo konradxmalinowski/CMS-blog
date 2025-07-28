@@ -33,14 +33,12 @@ const ArticlePage = () => {
       <Header />
       <div className="min-w-80 max-w-150 border-2 border-gray-300 p-8 rounded-xl">
         <Link to="/">
-          <Button variant="light" className="mb-6">
-            &lt;- Back to articles
-          </Button>
+          <Button variant="light">&lt;- Back to articles</Button>
         </Link>
         {!article && <p>Article with this ID was not found</p>}
         {article && (
           <>
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-4 mt-6">
               {article.categories.split(',').map((category, idx) => (
                 <Category key={idx}>{category}</Category>
               ))}

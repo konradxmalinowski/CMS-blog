@@ -1,13 +1,18 @@
 import type { Article } from './components/Articles';
 
-type resultType = {
-  error?: string;
+export type resultType = {
+  message?: string;
   success: boolean;
 };
 
-type resultCheckType = {
+export type resultCheckType = {
   success: boolean;
   name?: string;
+};
+
+export type resultLogoutType = {
+  success: boolean;
+  message?: string;
 };
 
 export const fetchArticles = async () => {
@@ -64,11 +69,33 @@ export const login = async (email: string = '', password: string = '') => {
     const result: resultType = await response.json();
     return result;
   } catch (error) {
-    if (error instanceof Error) {
-      console.log(error?.message);
-    } else {
-      console.log('Failed to log in');
+    if (error instanceof Error)
+      return { success: false, message: error?.message };
+
+    return { success: false, message: 'Failed to log in' };
+  }
+};
+
+export const logout = async () => {
+  try {
+    const response: Response = await fetch(
+      'http://localhost/cms-blog/backend/logout.php',
+      {
+        credentials: 'include',
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to logout');
     }
+
+    const result: resultLogoutType = await response.json();
+    return result;
+  } catch (error) {
+    if (error instanceof Error)
+      return { success: false, message: error.message };
+
+    return { success: false, message: 'Failed to logout' };
   }
 };
 
@@ -106,18 +133,20 @@ export const register = async (
     const result: resultType = await response.json();
     return result;
   } catch (error) {
-    if (error instanceof Error) {
-      console.log(error?.message);
-    } else {
-      console.log('Failed to register');
-    }
+    if (error instanceof Error)
+      return { success: false, message: error?.message };
+
+    return { success: false, message: 'Failed to register' };
   }
 };
 
 export const checkIfIsLoggedIn = async () => {
   try {
-    const response = await fetch(
-      'http://localhost/cms-blog/backend/checkIfIsLoggedIn.php'
+    const response: Response = await fetch(
+      'http://localhost/cms-blog/backend/checkIfIsLoggedIn.php',
+      {
+        credentials: 'include',
+      }
     );
 
     if (!response.ok) {
@@ -127,10 +156,8 @@ export const checkIfIsLoggedIn = async () => {
     const result: resultCheckType = await response.json();
     return result;
   } catch (error) {
-    if (error instanceof Error) {
-      console.log(error?.message);
-    } else {
-      console.log('Failed to register');
-    }
+    if (error instanceof Error) return { success: false };
+
+    return { success: false };
   }
 };
